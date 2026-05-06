@@ -21,6 +21,7 @@ export function Footer() {
                   src="/logo.png" 
                   alt="Maa Bhawani Logo" 
                   fill
+                  sizes="96px"
                   className="object-contain drop-shadow-md"
                 />
               </div>

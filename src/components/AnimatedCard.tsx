@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import { useRef, useEffect, useState, ReactNode } from "react";
 
 interface AnimatedCardProps {
   children: ReactNode;
@@ -14,16 +13,36 @@ export function AnimatedCard({
   delay = 0,
   className = "",
 }: AnimatedCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-40px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay }}
-      whileHover={{ y: -6, transition: { duration: 0.25 } }}
-      className={`bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-gold/40 transition-all duration-300 ${className}`}
+    <div
+      ref={ref}
+      className={`bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-xl hover:border-brand-gold/40 hover:-translate-y-1.5 transition-all duration-300 ${className}`}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(30px)",
+        transition: `opacity 0.5s ease ${delay}s, transform 0.5s ease ${delay}s, box-shadow 0.3s, border-color 0.3s`,
+      }}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

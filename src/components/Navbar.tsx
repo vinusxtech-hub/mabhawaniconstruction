@@ -36,7 +36,7 @@ export function Navbar() {
   const navPadding = isScrolled ? "py-2 px-6" : "py-6 px-6 lg:px-10";
   
   const navBg = isScrolled
-    ? "bg-[#111111]/90 backdrop-blur-xl border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
+    ? "bg-[#0F172A]/95 border border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)]"
     : "bg-transparent border border-transparent";
 
   const textClass = "text-white hover:text-brand-gold";
@@ -55,6 +55,7 @@ export function Navbar() {
                 src="/logo.png" 
                 alt="Maa Bhawani Logo" 
                 fill
+                sizes="(max-width: 768px) 48px, 80px"
                 className="object-contain"
                 priority
               />
@@ -117,7 +118,7 @@ export function Navbar() {
             animate={{ opacity: 1, height: "100vh" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-0 z-40 md:hidden bg-[#111111]/98 backdrop-blur-3xl pt-24"
+            className="fixed inset-0 top-0 z-40 md:hidden bg-[#0F172A]/[0.98] pt-24"
           >
             <div className="flex flex-col h-full px-6 pb-8">
               <div className="flex flex-col space-y-4 flex-grow">

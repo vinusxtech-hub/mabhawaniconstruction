@@ -54,6 +54,7 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${poppins.variable} scroll-smooth antialiased`}
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-screen flex flex-col bg-white font-inter" suppressHydrationWarning>
         <LayoutShell>{children}</LayoutShell>

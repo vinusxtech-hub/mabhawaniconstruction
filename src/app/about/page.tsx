@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 import {
   Target,
   Eye,
@@ -45,6 +45,43 @@ const values = [
   },
 ];
 
+function FadeIn({ children, className = "", direction = "up" }: { children: React.ReactNode; className?: string; direction?: "up" | "left" | "right" }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-40px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const initialTransform = direction === "left" ? "translateX(-30px)" : direction === "right" ? "translateX(30px)" : "translateY(20px)";
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translate(0)" : initialTransform,
+        transition: "opacity 0.6s ease, transform 0.6s ease",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
 export default function AboutPage() {
   return (
     <>
@@ -52,11 +89,7 @@ export default function AboutPage() {
       <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-20 bg-brand-black overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-brand-black via-brand-black to-brand-gold/10" />
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <FadeIn>
             <span className="text-brand-gold text-sm font-medium tracking-wider uppercase">
               About Us
             </span>
@@ -68,7 +101,7 @@ export default function AboutPage() {
               Learn about our journey, our values, and the team behind Maa
               Bhawani Construction & Contractor.
             </p>
-          </motion.div>
+          </FadeIn>
         </div>
       </section>
 
@@ -77,12 +110,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left - Text */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
+            <FadeIn direction="left">
               <h2 className="font-poppins font-bold text-2xl sm:text-3xl md:text-4xl text-brand-black mb-4 sm:mb-6">
                 Your Trusted Construction Partner Since 2009
               </h2>
@@ -121,16 +149,10 @@ export default function AboutPage() {
                   </span>
                 </div>
               </div>
-            </motion.div>
+            </FadeIn>
 
             {/* Right - Visual */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
+            <FadeIn direction="right" className="relative">
               <div className="aspect-[4/3] bg-gradient-to-br from-brand-light to-gray-100 rounded-2xl overflow-hidden border border-gray-200 flex items-center justify-center relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-brand-gold/5 to-brand-gold/10" />
                 <div className="text-center p-8 relative z-10">
@@ -145,7 +167,7 @@ export default function AboutPage() {
               </div>
               {/* Accent element */}
               <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-brand-gold/20 rounded-xl -z-10" />
-            </motion.div>
+            </FadeIn>
           </div>
         </div>
       </section>
@@ -274,12 +296,9 @@ export default function AboutPage() {
 
             <div className="space-y-8">
               {milestones.map((m, i) => (
-                <motion.div
+                <FadeIn
                   key={m.year}
-                  initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
+                  direction={i % 2 === 0 ? "left" : "right"}
                   className={`relative flex items-start gap-4 md:gap-0 ${
                     i % 2 === 0
                       ? "md:flex-row md:text-right"
@@ -300,7 +319,7 @@ export default function AboutPage() {
                     </span>
                     <p className="text-brand-gray/70 text-sm mt-1">{m.text}</p>
                   </div>
-                </motion.div>
+                </FadeIn>
               ))}
             </div>
           </div>

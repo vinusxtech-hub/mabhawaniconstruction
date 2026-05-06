@@ -211,7 +211,7 @@ export function Chatbot() {
           )}
         </AnimatePresence>
         {!isOpen && (
-          <span className="absolute inset-0 rounded-full bg-brand-gold animate-ping opacity-20" />
+          <span className="absolute inset-0 rounded-full bg-brand-gold animate-pulse opacity-30" />
         )}
       </motion.button>
 

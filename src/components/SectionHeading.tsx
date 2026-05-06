@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useRef, useEffect, useState } from "react";
 
 interface SectionHeadingProps {
   title: string;
@@ -15,13 +15,34 @@ export function SectionHeading({
   light = false,
   centered = true,
 }: SectionHeadingProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-50px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.6 }}
+    <div
+      ref={ref}
       className={`mb-12 ${centered ? "text-center" : ""}`}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: isVisible ? "translateY(0)" : "translateY(20px)",
+        transition: "opacity 0.6s ease, transform 0.6s ease",
+      }}
     >
       <h2
         className={`font-poppins font-bold text-3xl md:text-4xl lg:text-5xl ${
@@ -40,6 +61,6 @@ export function SectionHeading({
           {subtitle}
         </p>
       )}
-    </motion.div>
+    </div>
   );
 }

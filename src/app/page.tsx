@@ -2,6 +2,7 @@
 
 import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Shield,
   Users,
@@ -21,11 +22,11 @@ import "swiper/css";
 import "swiper/css/effect-fade";
 
 const heroImages = [
-  "https://images.unsplash.com/photo-1541888082420-ef30af19060d?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?q=80&w=1200&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop",
+  "/paper.png",
+  "/floor.png",
+  "/under.png",
+  "/wall.png",
+  "/image.png",
 ];
 
 /* ────────────── Counter Animation ────────────── */
@@ -114,32 +115,53 @@ export default function HomePage() {
       {/* ═══════ HERO SECTION ═══════ */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-brand-black">
         {/* Background Image Slider */}
-        <div className="absolute inset-0 z-0">
+        <div className="absolute inset-0 z-0 bg-brand-black">
+          {/* Static fallback to prevent black flash before Swiper initializes */}
+          <div className="absolute inset-0 z-0">
+            <Image
+              src={heroImages[0]}
+              alt="Background"
+              fill
+              sizes="100vw"
+              quality={60}
+              className="object-cover object-center"
+              priority
+            />
+          </div>
+
           <Swiper
             modules={[Autoplay, EffectFade]}
             effect="fade"
             autoplay={{ delay: 5000, disableOnInteraction: false }}
-            loop={true}
+            rewind={true}
             allowTouchMove={false}
-            className="w-full h-full"
+            className="w-full h-full absolute inset-0 z-10"
           >
             {heroImages.map((src, i) => (
               <SwiperSlide key={i}>
-                <div
-                  className="w-full h-full bg-cover bg-center bg-no-repeat"
-                  style={{ backgroundImage: `url("${src}")` }}
-                />
+                <div className="relative w-full h-full">
+                  <Image
+                    src={src}
+                    alt={`Construction project ${i + 1}`}
+                    fill
+                    sizes="100vw"
+                    quality={60}
+                    className="object-cover object-center will-change-transform"
+                    priority
+                    loading="eager"
+                  />
+                </div>
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent z-10 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-20 pointer-events-none" />
         </div>
 
         {/* Content */}
         <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gold/10 backdrop-blur-md border border-brand-gold/30 rounded-full text-brand-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 sm:mb-8 shadow-[0_0_15px_rgba(212,175,55,0.15)]">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gold/10 border border-brand-gold/30 rounded-full text-brand-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 sm:mb-8">
               <Hammer className="w-4 h-4" />
               Trusted Construction Partner
             </div>
@@ -166,7 +188,7 @@ export default function HomePage() {
               </Link>
               <a
                 href="tel:+918319213539"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-white/5 backdrop-blur-md border border-white/10 text-white font-semibold rounded-lg hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2"
+                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors duration-300 flex items-center justify-center gap-2"
               >
                 <Phone className="w-5 h-5 text-brand-gold" />
                 +91 8319213539

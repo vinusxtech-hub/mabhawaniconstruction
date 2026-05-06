@@ -2,7 +2,6 @@
 
 import { useState, useRef, useEffect } from "react";
 import { MoveHorizontal } from "lucide-react";
-import { motion } from "framer-motion";
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -67,7 +66,7 @@ export function BeforeAfterSlider({
         className="absolute inset-0 w-full h-full bg-cover bg-center"
         style={{ backgroundImage: `url(${afterImage})` }}
       />
-      <div className="absolute top-4 right-4 px-3 py-1 bg-black/50 backdrop-blur-sm text-white text-xs font-semibold rounded-md shadow-sm z-10">
+      <div className="absolute top-4 right-4 px-3 py-1 bg-black/60 text-white text-xs font-semibold rounded-md shadow-sm z-10">
         {afterLabel}
       </div>
 
@@ -83,7 +82,7 @@ export function BeforeAfterSlider({
       {/* Before Label - Only show if slider is far enough to the right */}
       {sliderPosition > 15 && (
         <div
-          className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-sm text-white text-xs font-semibold rounded-md shadow-sm z-10"
+          className="absolute top-4 left-4 px-3 py-1 bg-black/60 text-white text-xs font-semibold rounded-md shadow-sm z-10"
         >
           {beforeLabel}
         </div>
@@ -95,18 +94,18 @@ export function BeforeAfterSlider({
         style={{ left: `${sliderPosition}%`, transform: "translateX(-50%)" }}
       >
         <div className="absolute top-0 bottom-0 w-0.5 bg-brand-gold shadow-[0_0_5px_rgba(212,175,55,0.5)]" />
-        <motion.div
-          animate={isDragging ? { scale: 1.1 } : { scale: 1 }}
-          className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,0,0,0.3)] border-2 border-brand-gold relative z-10"
+        <div
+          className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,0,0,0.3)] border-2 border-brand-gold relative z-10 transition-transform duration-150"
+          style={{ transform: isDragging ? "scale(1.1)" : "scale(1)" }}
         >
           <MoveHorizontal className="w-5 h-5 text-brand-black" />
-        </motion.div>
+        </div>
       </div>
 
       {/* Instruction Overlay (fades out on hover/drag) */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
         {!isDragging && (
-          <div className="px-4 py-2 bg-black/60 backdrop-blur-sm text-white text-sm font-medium rounded-full mt-24">
+          <div className="px-4 py-2 bg-black/60 text-white text-sm font-medium rounded-full mt-24">
             Drag to see before/after
           </div>
         )}

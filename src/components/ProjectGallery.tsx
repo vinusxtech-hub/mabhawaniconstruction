@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
 import { SectionHeading } from "@/components/SectionHeading";
 
@@ -58,17 +57,12 @@ export function ProjectGallery({ projects }: { projects: Project[] }) {
         </div>
 
         {/* Grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <AnimatePresence mode="popLayout">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <motion.div
+              <div
                 key={project.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
                 className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-brand-gold/30 transition-all duration-300 group"
+                style={{ animation: "fadeScaleIn 0.3s ease forwards" }}
               >
                 {/* Slider replaces static image */}
                 <div className="w-full relative group/slider">
@@ -95,10 +89,9 @@ export function ProjectGallery({ projects }: { projects: Project[] }) {
                     {project.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
-          </AnimatePresence>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
