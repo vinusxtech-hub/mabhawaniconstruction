@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Phone, HardHat } from "lucide-react";
+import { MessageCircle, X, Send, Phone, HardHat, Loader2 } from "lucide-react";
 
 interface Message {
   id: number;
@@ -14,113 +14,22 @@ interface Message {
 interface QuickButton {
   label: string;
   value: string;
+  action?: string;
 }
 
 const PHONE = "+918319213539";
 
-const quickButtons: QuickButton[] = [
-  { label: "🏗️ Our Services", value: "services" },
-  { label: "💰 Pricing Info", value: "pricing" },
-  { label: "📞 Contact Details", value: "contact" },
-  { label: "👷 About Us", value: "about" },
+const defaultQuickButtons: QuickButton[] = [
+  { label: "🏗️ Our Services", value: "What services do you offer?" },
+  { label: "💰 Pricing Info", value: "What are your pricing details?" },
+  { label: "📞 Contact Details", value: "How can I contact you?" },
+  { label: "👷 About Us", value: "Tell me about your company" },
 ];
 
-function getBotResponse(input: string): { text: string; buttons?: QuickButton[] } {
-  const lower = input.toLowerCase();
-
-  if (lower.includes("service") || lower.includes("what do you") || lower.includes("offer")) {
-    return {
-      text: "We offer a wide range of construction services:\n\n🏠 Residential & Commercial Construction\n🔨 Home Renovation\n✨ Kota Stone & Marble Polishing\n🏗️ Tile Installation & Flooring\n🧱 Wall, Column, Slab & Brick Work\n🎨 Plastering & Finishing\n\nWould you like to know more about any specific service?",
-      buttons: [
-        { label: "💰 Get Pricing", value: "pricing" },
-        { label: "📱 WhatsApp Us", value: "whatsapp" },
-      ],
-    };
-  }
-
-  if (lower.includes("price") || lower.includes("cost") || lower.includes("rate") || lower.includes("pricing") || lower.includes("quote")) {
-    return {
-      text: "Pricing depends on the scope & type of work. We offer:\n\n✅ Free site visit & consultation\n✅ Transparent & competitive pricing\n✅ No hidden charges\n\nFor an accurate quote, please share your requirements with us directly!",
-      buttons: [
-        { label: "📱 WhatsApp for Quote", value: "whatsapp_quote" },
-        { label: "📞 Call Now", value: "call" },
-      ],
-    };
-  }
-
-  if (lower.includes("contact") || lower.includes("phone") || lower.includes("number") || lower.includes("reach")) {
-    return {
-      text: `📞 Phone: +91 8319213539\n👷 Proprietor: Chainsingh Surawat\n👷 Co-Owner: Kuldeep Singh Surawat\n\n⏰ Mon-Sat: 8:00 AM - 7:00 PM\n\nFeel free to call or WhatsApp us anytime!`,
-      buttons: [
-        { label: "📞 Call Now", value: "call" },
-        { label: "📱 WhatsApp", value: "whatsapp" },
-      ],
-    };
-  }
-
-  if (lower.includes("about") || lower.includes("who") || lower.includes("company")) {
-    return {
-      text: "🏗️ Maa Bhawani Construction & Contractor is a trusted construction company specializing in residential, commercial, and renovation projects.\n\n👷 Proprietor: Chainsingh Surawat\n👷 Co-Owner: Kuldeep Singh Surawat\n\nWe are committed to quality materials, expert craftsmanship, and on-time delivery.",
-      buttons: [
-        { label: "🏗️ View Services", value: "services" },
-        { label: "📞 Contact Us", value: "contact" },
-      ],
-    };
-  }
-
-  if (lower.includes("whatsapp") && lower.includes("quote")) {
-    return {
-      text: "I'll open WhatsApp with a pre-filled message for a quote request. Click below!",
-      buttons: [{ label: "📱 Open WhatsApp", value: "open_whatsapp_quote" }],
-    };
-  }
-
-  if (lower.includes("whatsapp")) {
-    return {
-      text: "I'll connect you to our WhatsApp. Click below to start chatting!",
-      buttons: [{ label: "📱 Open WhatsApp", value: "open_whatsapp" }],
-    };
-  }
-
-  if (lower.includes("call")) {
-    return {
-      text: "You can call us directly at +91 8319213539. Click below to dial!",
-      buttons: [{ label: "📞 Call Now", value: "dial" }],
-    };
-  }
-
-  if (lower.includes("hello") || lower.includes("hi") || lower.includes("hey") || lower.includes("namaste")) {
-    return {
-      text: "Namaste! 🙏 Welcome to Maa Bhawani Construction & Contractor. How can I help you today?",
-      buttons: quickButtons,
-    };
-  }
-
-  if (lower.includes("renovation") || lower.includes("renovate")) {
-    return {
-      text: "We provide complete home renovation services including:\n\n🏠 Interior & Exterior Renovation\n🪟 Modern Design Updates\n🎨 Painting & Finishing\n✨ Flooring Upgrades\n\nWant a free consultation?",
-      buttons: [
-        { label: "📱 WhatsApp for Consultation", value: "whatsapp_quote" },
-        { label: "📞 Call Us", value: "call" },
-      ],
-    };
-  }
-
-  if (lower.includes("floor") || lower.includes("tile") || lower.includes("marble") || lower.includes("kota")) {
-    return {
-      text: "Our flooring & polishing services include:\n\n✨ Kota Stone Polishing\n✨ Marble Polishing\n🔲 Tile Installation\n🏗️ Complete Flooring Solutions\n\nWe use premium materials for a lasting finish!",
-      buttons: [
-        { label: "💰 Get Quote", value: "pricing" },
-        { label: "📱 WhatsApp", value: "whatsapp" },
-      ],
-    };
-  }
-
-  return {
-    text: "I'd be happy to help! You can ask me about:\n\n• Our construction services\n• Pricing information\n• Contact details\n• Company information\n\nOr connect with us directly:",
-    buttons: quickButtons,
-  };
-}
+const postResponseButtons: QuickButton[] = [
+  { label: "📞 Call Now", value: "call", action: "call" },
+  { label: "📱 WhatsApp", value: "whatsapp", action: "whatsapp" },
+];
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -129,12 +38,14 @@ export function Chatbot() {
       id: 1,
       text: "Namaste! 🙏 Welcome to Maa Bhawani Construction. How can I help you today?",
       sender: "bot",
-      buttons: quickButtons,
+      buttons: defaultQuickButtons,
     },
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -146,59 +57,135 @@ export function Chatbot() {
     }
   }, [isOpen]);
 
-  const handleSend = (text?: string) => {
-    const messageText = text || input.trim();
-    if (!messageText) return;
-
-    const userMsg: Message = {
-      id: Date.now(),
-      text: messageText,
-      sender: "user",
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    setInput("");
-
-    // Handle special actions
-    if (messageText === "open_whatsapp" || messageText === "whatsapp") {
-      setTimeout(() => {
-        window.open(
-          `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Maa Bhawani Construction! I am interested in your services.")}`,
-          "_blank"
-        );
-      }, 300);
+  const handleAction = useCallback((action: string) => {
+    if (action === "call") {
+      window.open(`tel:${PHONE}`, "_self");
+    } else if (action === "whatsapp") {
+      window.open(
+        `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Maa Bhawani Construction! I am interested in your services.")}`,
+        "_blank"
+      );
     }
+  }, []);
 
-    if (messageText === "open_whatsapp_quote" || messageText === "whatsapp_quote") {
-      setTimeout(() => {
-        window.open(
-          `https://wa.me/${PHONE}?text=${encodeURIComponent("Hello Maa Bhawani Construction! I would like to get a quote for my project. Here are the details:\n\nProject Type: \nLocation: \nBudget Range: ")}`,
-          "_blank"
-        );
-      }, 300);
-    }
+  const sendMessage = useCallback(
+    async (text: string) => {
+      if (!text.trim() || isLoading) return;
 
-    if (messageText === "dial" || messageText === "call") {
-      setTimeout(() => {
-        window.open(`tel:+${PHONE}`, "_self");
-      }, 300);
-    }
+      const userMsg: Message = { id: Date.now(), text, sender: "user" };
+      setMessages((prev) => [...prev, userMsg]);
+      setInput("");
+      setIsLoading(true);
 
-    // Bot response
-    setTimeout(() => {
-      const response = getBotResponse(messageText);
-      const botMsg: Message = {
-        id: Date.now() + 1,
-        text: response.text,
-        sender: "bot",
-        buttons: response.buttons,
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 600);
-  };
+      // Build conversation history for API
+      const history = messages
+        .filter((m) => m.id !== 1) // skip initial greeting
+        .map((m) => ({
+          role: m.sender === "user" ? ("user" as const) : ("assistant" as const),
+          content: m.text,
+        }));
+      history.push({ role: "user", content: text });
+
+      const botMsgId = Date.now() + 1;
+
+      try {
+        abortRef.current = new AbortController();
+
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: history }),
+          signal: abortRef.current.signal,
+        });
+
+        if (!res.ok) throw new Error("API error");
+
+        const contentType = res.headers.get("content-type") || "";
+
+        if (contentType.includes("text/event-stream") && res.body) {
+          // Streaming response
+          setMessages((prev) => [
+            ...prev,
+            { id: botMsgId, text: "", sender: "bot" },
+          ]);
+
+          const reader = res.body.getReader();
+          const decoder = new TextDecoder();
+          let fullText = "";
+
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = decoder.decode(value, { stream: true });
+            const lines = chunk.split("\n").filter((l) => l.trim() !== "");
+
+            for (const line of lines) {
+              if (line.startsWith("data: ")) {
+                const data = line.slice(6);
+                if (data === "[DONE]") continue;
+                try {
+                  const parsed = JSON.parse(data);
+                  if (parsed.content) {
+                    fullText += parsed.content;
+                    setMessages((prev) =>
+                      prev.map((m) =>
+                        m.id === botMsgId ? { ...m, text: fullText } : m
+                      )
+                    );
+                  }
+                } catch { /* skip */ }
+              }
+            }
+          }
+
+          // Add action buttons after streaming completes
+          setMessages((prev) =>
+            prev.map((m) =>
+              m.id === botMsgId
+                ? { ...m, text: fullText, buttons: postResponseButtons }
+                : m
+            )
+          );
+        } else {
+          // Non-streaming fallback (JSON response)
+          const data = await res.json();
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: botMsgId,
+              text: data.message || "Sorry, something went wrong.",
+              sender: "bot",
+              buttons: postResponseButtons,
+            },
+          ]);
+        }
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: botMsgId,
+              text: "Sorry, I couldn't connect right now. Please call us at +91 8319213539 for assistance! 📞",
+              sender: "bot",
+              buttons: postResponseButtons,
+            },
+          ]);
+        }
+      } finally {
+        setIsLoading(false);
+        abortRef.current = null;
+      }
+    },
+    [messages, isLoading]
+  );
 
   const handleButtonClick = (button: QuickButton) => {
-    handleSend(button.value);
+    if (button.action) {
+      handleAction(button.action);
+      return;
+    }
+    sendMessage(button.value);
   };
 
   return (
@@ -223,7 +210,6 @@ export function Chatbot() {
             </motion.div>
           )}
         </AnimatePresence>
-        {/* Pulse ring */}
         {!isOpen && (
           <span className="absolute inset-0 rounded-full bg-brand-gold animate-ping opacity-20" />
         )}
@@ -237,7 +223,7 @@ export function Chatbot() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-20 sm:bottom-24 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[380px] max-h-[70vh] sm:max-h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col"
+            className="fixed bottom-20 sm:bottom-24 right-2 sm:right-6 z-50 w-[calc(100vw-1rem)] sm:w-[450px] max-h-[85vh] sm:max-h-[650px] bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col"
           >
             {/* Header */}
             <div className="bg-brand-black px-4 py-3 flex items-center gap-3">
@@ -246,14 +232,14 @@ export function Chatbot() {
               </div>
               <div className="flex-1">
                 <h3 className="text-white font-poppins font-semibold text-sm">
-                  Maa Bhawani Support
+                  Maa Bhawani AI Assistant
                 </h3>
                 <p className="text-white/50 text-xs">
-                  Typically replies instantly
+                  {isLoading ? "Typing..." : "Powered by AI"}
                 </p>
               </div>
               <a
-                href={`tel:+${PHONE}`}
+                href={`tel:${PHONE}`}
                 className="p-2 bg-brand-gold/20 rounded-full hover:bg-brand-gold/40 transition-colors"
               >
                 <Phone className="w-4 h-4 text-brand-gold" />
@@ -261,14 +247,10 @@ export function Chatbot() {
             </div>
 
             {/* Messages */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50 max-h-[320px]">
+            <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50 max-h-[480px]">
               {messages.map((msg) => (
                 <div key={msg.id}>
-                  <div
-                    className={`flex ${
-                      msg.sender === "user" ? "justify-end" : "justify-start"
-                    }`}
-                  >
+                  <div className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
                     <div
                       className={`max-w-[85%] px-3.5 py-2.5 rounded-2xl text-sm whitespace-pre-line ${
                         msg.sender === "user"
@@ -277,10 +259,14 @@ export function Chatbot() {
                       }`}
                     >
                       {msg.text}
+                      {/* Streaming cursor */}
+                      {msg.sender === "bot" && isLoading && msg.id === messages[messages.length - 1]?.id && (
+                        <span className="inline-block w-1.5 h-4 bg-brand-gold/60 ml-0.5 animate-pulse rounded-sm" />
+                      )}
                     </div>
                   </div>
                   {/* Quick buttons */}
-                  {msg.sender === "bot" && msg.buttons && (
+                  {msg.sender === "bot" && msg.buttons && !isLoading && (
                     <div className="flex flex-wrap gap-1.5 mt-2 ml-1">
                       {msg.buttons.map((btn) => (
                         <button
@@ -295,6 +281,14 @@ export function Chatbot() {
                   )}
                 </div>
               ))}
+              {/* Loading indicator */}
+              {isLoading && messages[messages.length - 1]?.sender === "user" && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-md shadow-sm px-4 py-3">
+                    <Loader2 className="w-4 h-4 text-brand-gold animate-spin" />
+                  </div>
+                </div>
+              )}
               <div ref={messagesEndRef} />
             </div>
 
@@ -303,7 +297,7 @@ export function Chatbot() {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  handleSend();
+                  sendMessage(input);
                 }}
                 className="flex items-center gap-2"
               >
@@ -313,11 +307,12 @@ export function Chatbot() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Type your message..."
-                  className="flex-1 px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/30 text-brand-black placeholder:text-gray-400"
+                  disabled={isLoading}
+                  className="flex-1 px-3.5 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-brand-gold focus:ring-1 focus:ring-brand-gold/30 text-brand-black placeholder:text-gray-400 disabled:opacity-50"
                 />
                 <button
                   type="submit"
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || isLoading}
                   className="p-2.5 bg-brand-gold rounded-xl text-brand-black hover:bg-brand-gold-dark transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <Send className="w-4 h-4" />

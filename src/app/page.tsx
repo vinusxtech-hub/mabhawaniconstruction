@@ -15,6 +15,18 @@ import {
 import { SectionHeading } from "@/components/SectionHeading";
 import { AnimatedCard } from "@/components/AnimatedCard";
 import { useIsMobile } from "@/hooks/useDevice";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay, EffectFade } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/effect-fade";
+
+const heroImages = [
+  "https://images.unsplash.com/photo-1541888082420-ef30af19060d?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1531834685032-c34bf0d84c77?q=80&w=1200&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1504307651254-35680f356f12?q=80&w=1200&auto=format&fit=crop",
+];
 
 /* ────────────── Counter Animation ────────────── */
 function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
@@ -101,16 +113,27 @@ export default function HomePage() {
     <>
       {/* ═══════ HERO SECTION ═══════ */}
       <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-brand-black">
-        {/* Background Image */}
+        {/* Background Image Slider */}
         <div className="absolute inset-0 z-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url("https://images.unsplash.com/photo-1541888082420-ef30af19060d?q=80&w=1200&auto=format&fit=crop")`,
-            }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent z-10" />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-10" />
+          <Swiper
+            modules={[Autoplay, EffectFade]}
+            effect="fade"
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            loop={true}
+            allowTouchMove={false}
+            className="w-full h-full"
+          >
+            {heroImages.map((src, i) => (
+              <SwiperSlide key={i}>
+                <div
+                  className="w-full h-full bg-cover bg-center bg-no-repeat"
+                  style={{ backgroundImage: `url("${src}")` }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent z-10 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-10 pointer-events-none" />
         </div>
 
         {/* Content */}
