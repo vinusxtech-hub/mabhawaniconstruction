@@ -114,41 +114,91 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "100vh" }}
-            exit={{ opacity: 0, height: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 top-0 z-40 md:hidden bg-[#0F172A]/[0.98] pt-24"
+            className="fixed inset-0 z-40 md:hidden overflow-hidden"
           >
-            <div className="flex flex-col h-full px-6 pb-8">
-              <div className="flex flex-col space-y-4 flex-grow">
-                {navLinks.map((link) => {
+            {/* Fully opaque background — no bleed-through */}
+            <div className="absolute inset-0 bg-[#0B1120]" />
+
+            {/* Decorative gradient accent */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/10 via-transparent to-transparent rounded-full blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-brand-gold/5 via-transparent to-transparent rounded-full blur-2xl" />
+
+            <div className="relative flex flex-col h-full pt-28 px-8 pb-10">
+              {/* Navigation Links */}
+              <div className="flex flex-col space-y-1 flex-grow">
+                {navLinks.map((link, index) => {
                   const isActive = pathname === link.href;
                   return (
-                    <Link
+                    <motion.div
                       key={link.name}
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`text-2xl font-poppins font-medium transition-all ${
-                        isActive
-                          ? "text-brand-gold"
-                          : "text-white hover:text-brand-gold"
-                      }`}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 + index * 0.07, duration: 0.35 }}
                     >
-                      {link.name}
-                    </Link>
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`group flex items-center justify-center gap-4 py-4 border-b transition-all duration-300 ${
+                          isActive
+                            ? "border-brand-gold/40"
+                            : "border-white/[0.06] hover:border-white/20"
+                        }`}
+                      >
+                        {/* Active indicator dot */}
+                        <span
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            isActive
+                              ? "bg-brand-gold scale-100"
+                              : "bg-white/20 scale-75 group-hover:bg-brand-gold/50 group-hover:scale-100"
+                          }`}
+                        />
+                        <span
+                          className={`text-[1.6rem] font-poppins font-semibold tracking-wide transition-all duration-300 ${
+                            isActive
+                              ? "text-brand-gold"
+                              : "text-white/90 group-hover:text-white group-hover:translate-x-1"
+                          }`}
+                        >
+                          {link.name}
+                        </span>
+                      </Link>
+                    </motion.div>
                   );
                 })}
               </div>
-              <div className="mt-auto">
+
+              {/* Footer section */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+                className="mt-auto space-y-6"
+              >
+                {/* Contact info */}
+                <div className="flex items-center justify-center gap-6 text-sm text-white/40">
+                  <a href="tel:+919876543210" className="hover:text-brand-gold transition-colors">
+                    +91 98765 43210
+                  </a>
+                  <span className="w-1 h-1 rounded-full bg-white/20" />
+                  <a href="mailto:info@mabhawani.com" className="hover:text-brand-gold transition-colors">
+                    info@mabhawani.com
+                  </a>
+                </div>
+
+                {/* CTA Button */}
                 <Link
                   href="/contact"
                   onClick={() => setIsOpen(false)}
-                  className="w-full flex justify-center py-4 bg-brand-gold text-brand-black font-semibold rounded-xl text-lg"
+                  className="w-full flex items-center justify-center gap-2 py-4 bg-brand-gold text-brand-black font-poppins font-bold rounded-2xl text-lg tracking-wide hover:bg-white hover:text-brand-black transition-all duration-300 shadow-[0_4px_20px_rgba(212,175,55,0.3)]"
                 >
+                  <HardHat className="w-5 h-5" />
                   Start Your Project
                 </Link>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
