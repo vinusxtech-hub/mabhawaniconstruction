@@ -17,6 +17,11 @@ import {
   Paintbrush,
   Gem,
   LayoutGrid,
+  ClipboardCheck,
+  Compass,
+  HardHat,
+  PhoneCall,
+  CheckCircle2
 } from "lucide-react";
 import { useIsMobile } from "@/hooks/useDevice";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -255,6 +260,36 @@ export default function HomePage() {
         )}
       </section>
 
+      {/* ═══════ YELLOW MARQUEE ═══════ */}
+      <div className="bg-brand-gold py-4 overflow-hidden border-y border-brand-gold-dark/20 relative z-30">
+        <div className="animate-marquee whitespace-nowrap flex items-center">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="flex items-center mx-4">
+              <span className="text-brand-black font-poppins font-bold text-sm sm:text-base uppercase tracking-wider">
+                ★ House Construction
+              </span>
+              <span className="mx-8 text-brand-black/30">|</span>
+              <span className="text-brand-black font-poppins font-bold text-sm sm:text-base uppercase tracking-wider">
+                ★ Interior Design
+              </span>
+              <span className="mx-8 text-brand-black/30">|</span>
+              <span className="text-brand-black font-poppins font-bold text-sm sm:text-base uppercase tracking-wider">
+                ★ Renovation
+              </span>
+              <span className="mx-8 text-brand-black/30">|</span>
+              <span className="text-brand-black font-poppins font-bold text-sm sm:text-base uppercase tracking-wider">
+                ★ Tiles Work
+              </span>
+              <span className="mx-8 text-brand-black/30">|</span>
+              <span className="text-brand-black font-poppins font-bold text-sm sm:text-base uppercase tracking-wider">
+                ★ Marble Polishing
+              </span>
+              <span className="mx-8 text-brand-black/30">|</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* ═══════ ABOUT / STATS SECTION ═══════ */}
       <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -480,6 +515,138 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* ═══════ WORK PROCESS SECTION ═══════ */}
+      <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            title="Our Work Process"
+            subtitle="How we bring your dream project to life, step by step."
+          />
+
+          <div className="relative mt-12 sm:mt-16">
+            {/* Connection Line (Desktop) */}
+            <div className="hidden lg:block absolute top-1/2 left-0 w-full h-0.5 bg-brand-gold/20 -translate-y-1/2 z-0" />
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10">
+              {[
+                {
+                  step: "01",
+                  icon: ClipboardCheck,
+                  title: "Consultation",
+                  desc: "Discussion of your vision, requirements and budget planning."
+                },
+                {
+                  step: "02",
+                  icon: Compass,
+                  title: "Design & Plan",
+                  desc: "Creating detailed architectural designs and structural blueprints."
+                },
+                {
+                  step: "03",
+                  icon: HardHat,
+                  title: "Construction",
+                  desc: "Executing the build with high-quality materials and expert labor."
+                },
+                {
+                  step: "04",
+                  icon: CheckCircle2,
+                  title: "Final Handover",
+                  desc: "Thorough quality checks and delivering your completed project."
+                }
+              ].map((item, index) => (
+                <div key={index} className="flex flex-col items-center text-center group">
+                  <div className="relative mb-6">
+                    <div className="w-20 h-20 bg-white rounded-2xl shadow-lg border border-brand-gold/20 flex items-center justify-center group-hover:bg-brand-gold transition-all duration-500 transform group-hover:rotate-6">
+                      <item.icon className="w-10 h-10 text-brand-gold group-hover:text-brand-black transition-colors" />
+                    </div>
+                    <div className="absolute -top-3 -right-3 w-8 h-8 bg-brand-black text-brand-gold rounded-full flex items-center justify-center font-poppins font-bold text-xs border-2 border-brand-gold">
+                      {item.step}
+                    </div>
+                  </div>
+                  <h3 className="font-poppins font-bold text-xl text-brand-black mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-brand-gray/70 text-sm leading-relaxed max-w-[200px]">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="py-16 sm:py-20 md:py-28 bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading
+            title="What Our Clients Say"
+            subtitle="Don't just take our word for it. Here's what families in Ujjain have to say about our work."
+          />
+
+          <Swiper
+            modules={[Autoplay]}
+            autoplay={{ delay: 5000, disableOnInteraction: false }}
+            spaceBetween={32}
+            slidesPerView={1}
+            breakpoints={{
+              768: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }}
+            className="w-full pb-12"
+          >
+            {[
+              {
+                name: "Rahul Sharma",
+                role: "Home Owner",
+                text: "Maa Bhawani Construction ne mera sapno ka ghar banaya hai. Unka kaam ekdum saaf aur mazboot hai. Ujjain mein sabse best contractor!",
+                rating: 5
+              },
+              {
+                name: "Priya Patel",
+                role: "Villa Owner",
+                text: "The finishing and attention to detail are incredible. They completed the project on time and within budget. Highly recommended for any renovation.",
+                rating: 5
+              },
+              {
+                name: "Vijay Singh",
+                role: "Commercial Project",
+                text: "Professionals who know their job well. From foundation to paint, everything was handled smoothly. Great experience working with them.",
+                rating: 5
+              },
+              {
+                name: "Anand Jain",
+                role: "Retail Store Owner",
+                text: "Their Kota stone and marble polishing work is top-notch. Our showroom looks brand new. Very reasonable pricing as well.",
+                rating: 5
+              }
+            ].map((review, i) => (
+              <SwiperSlide key={i} className="h-auto">
+                <AnimatedCard className="p-8 flex flex-col h-full bg-[#fcf9f2]/50">
+                <div className="flex gap-1 mb-4">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5 text-brand-gold fill-current" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
+                <p className="text-brand-gray/80 italic mb-6 flex-grow leading-relaxed">
+                  &quot;{review.text}&quot;
+                </p>
+                <div className="flex items-center gap-4 border-t border-brand-gold/10 pt-6">
+                  <div className="w-12 h-12 bg-brand-gold/20 rounded-full flex items-center justify-center text-brand-gold font-bold">
+                    {review.name[0]}
+                  </div>
+                  <div>
+                    <h4 className="font-poppins font-bold text-brand-black">{review.name}</h4>
+                    <p className="text-xs text-brand-gray/60 uppercase tracking-widest">{review.role}</p>
+                  </div>
+                </div>
+                </AnimatedCard>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </section>
+
       {/* ═══════ CTA SECTION ═══════ */}
       <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -512,6 +679,17 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Floating Call Button for Mobile */}
+      <div className="fixed bottom-20 left-4 z-50 md:hidden">
+        <a
+          href="tel:+918319213539"
+          className="w-12 h-12 bg-brand-black text-brand-gold rounded-full shadow-2xl flex items-center justify-center border border-brand-gold/30 animate-bounce"
+          aria-label="Call Now"
+        >
+          <PhoneCall className="w-6 h-6" />
+        </a>
+      </div>
     </>
   );
 }
