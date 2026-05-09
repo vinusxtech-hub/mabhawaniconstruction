@@ -123,9 +123,9 @@ export function Navbar() {
             {/* Fully opaque background — no bleed-through */}
             <div className="absolute inset-0 bg-[#0B1120]" />
 
-            {/* Decorative gradient accent */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/10 via-transparent to-transparent rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-brand-gold/5 via-transparent to-transparent rounded-full blur-2xl" />
+            {/* Decorative gradient accent - no blur for mobile performance */}
+            <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-brand-gold/8 via-transparent to-transparent rounded-full opacity-60" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-brand-gold/5 via-transparent to-transparent rounded-full opacity-40" />
 
             <div className="relative flex flex-col h-full pt-28 px-8 pb-10">
               {/* Navigation Links */}

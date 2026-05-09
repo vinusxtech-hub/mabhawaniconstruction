@@ -4,22 +4,29 @@ import { useRef, useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  Shield,
+  ArrowRight,
+  ChevronDown,
+  Building,
+  Briefcase,
   Users,
-  Hammer,
+  HeartHandshake,
+  Shield,
   Clock,
   Eye,
-  ArrowRight,
-  Phone,
-  ChevronDown,
+  Hammer,
+  Paintbrush,
+  Gem,
+  LayoutGrid,
 } from "lucide-react";
-import { SectionHeading } from "@/components/SectionHeading";
-import { AnimatedCard } from "@/components/AnimatedCard";
 import { useIsMobile } from "@/hooks/useDevice";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectFade } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
+import { BeforeAfterSlider } from "@/components/BeforeAfterSlider";
+import { projects } from "@/data/projects";
+import { SectionHeading } from "@/components/SectionHeading";
+import { AnimatedCard } from "@/components/AnimatedCard";
 
 const heroImages = [
   "/paper.png",
@@ -29,8 +36,64 @@ const heroImages = [
   "/image.png",
 ];
 
+/* ────────────── Feature & Service Data ────────────── */
+const features = [
+  {
+    icon: Shield,
+    title: "Quality Materials",
+    desc: "We use only the finest materials to ensure durability that lasts generations.",
+  },
+  {
+    icon: Users,
+    title: "Expert Team",
+    desc: "Skilled professionals with decades of combined construction experience.",
+  },
+  {
+    icon: Hammer,
+    title: "Strong & Durable",
+    desc: "Every structure we build is engineered for strength and longevity.",
+  },
+  {
+    icon: Clock,
+    title: "On-Time Delivery",
+    desc: "We respect your time with reliable project timelines and milestones.",
+  },
+  {
+    icon: Eye,
+    title: "Transparent Process",
+    desc: "Full visibility into every stage of your construction project.",
+  },
+];
+
+const topServices = [
+  {
+    icon: Building,
+    title: "Residential & Commercial Construction",
+    desc: "End-to-end construction from foundation to finishing for homes and offices.",
+    image: "/under.png",
+  },
+  {
+    icon: Gem,
+    title: "Kota Stone & Marble Polishing",
+    desc: "Professional polishing to bring out the natural beauty and shine of your floors.",
+    image: "/floor.png",
+  },
+  {
+    icon: LayoutGrid,
+    title: "Tile Installation & Flooring",
+    desc: "Precision installation for floors, walls, and bathrooms using premium materials.",
+    image: "/paper.png",
+  },
+  {
+    icon: Paintbrush,
+    title: "Home Renovation & Interior",
+    desc: "Transform your space with our comprehensive renovation and finishing services.",
+    image: "/wall.png",
+  },
+];
+
 /* ────────────── Counter Animation ────────────── */
-function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: string }) {
+function AnimatedCounter({ target, suffix = "", className = "" }: { target: number; suffix?: string; className?: string }) {
   const [count, setCount] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
   const [isInView, setIsInView] = useState(false);
@@ -63,48 +126,12 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   }, [isInView, target]);
 
   return (
-    <span ref={ref} className="font-poppins font-bold text-3xl sm:text-4xl md:text-5xl text-brand-gold">
+    <span ref={ref} className={className || "font-poppins font-bold text-3xl sm:text-4xl md:text-5xl text-brand-gold"}>
       {count}
       {suffix}
     </span>
   );
 }
-
-/* ────────────── Feature Data ────────────── */
-const features = [
-  {
-    icon: Shield,
-    title: "Quality Materials",
-    desc: "We use only the finest materials to ensure durability that lasts generations.",
-  },
-  {
-    icon: Users,
-    title: "Expert Team",
-    desc: "Skilled professionals with decades of combined construction experience.",
-  },
-  {
-    icon: Hammer,
-    title: "Strong & Durable",
-    desc: "Every structure we build is engineered for strength and longevity.",
-  },
-  {
-    icon: Clock,
-    title: "On-Time Delivery",
-    desc: "We respect your time with reliable project timelines and milestones.",
-  },
-  {
-    icon: Eye,
-    title: "Transparent Process",
-    desc: "Full visibility into every stage of your construction project.",
-  },
-];
-
-const stats = [
-  { label: "Projects Completed", value: 250, suffix: "+" },
-  { label: "Years Experience", value: 15, suffix: "+" },
-  { label: "Happy Clients", value: 200, suffix: "+" },
-  { label: "Expert Workers", value: 50, suffix: "+" },
-];
 
 /* ────────────── Page Component ────────────── */
 export default function HomePage() {
@@ -113,10 +140,9 @@ export default function HomePage() {
   return (
     <>
       {/* ═══════ HERO SECTION ═══════ */}
-      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-brand-black">
+      <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-[#000000]">
         {/* Background Image Slider */}
-        <div className="absolute inset-0 z-0 bg-brand-black">
-          {/* Static fallback to prevent black flash before Swiper initializes */}
+        <div className="absolute inset-0 z-0 bg-[#000000]">
           <div className="absolute inset-0 z-0">
             <Image
               src={heroImages[0]}
@@ -154,58 +180,138 @@ export default function HomePage() {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-black/90 via-brand-black/70 to-transparent z-20 pointer-events-none" />
-          <div className="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/40 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-[#000000]/70 z-20 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#000000]/90 via-[#000000]/60 to-transparent z-20 pointer-events-none" />
         </div>
 
         {/* Content */}
-        <div className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gold/10 border border-brand-gold/30 rounded-full text-brand-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 sm:mb-8">
-              <Hammer className="w-4 h-4" />
-              Trusted Construction Partner
+        <div className="relative z-20 w-full pt-24 pb-16 flex items-center min-h-[100svh]">
+          <div className="flex flex-col lg:flex-row items-center justify-start w-full">
+            
+            {/* Left Image (bg.png) - touching absolute left */}
+            <div className="w-full lg:w-[30%] xl:w-[35%] relative h-[250px] sm:h-[300px] lg:h-[450px] xl:h-[550px] z-10 shrink-0 mb-6 lg:mb-0">
+              <Image
+                src="/bg.png"
+                alt="Hero graphic"
+                fill
+                sizes="(max-width: 1024px) 100vw, 35vw"
+                className="object-contain object-center lg:object-left"
+                priority
+              />
             </div>
 
-            <h1 className="font-poppins font-bold text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] text-white leading-[1.1] tracking-tight">
-              Real Site.<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-brand-gold-dark to-brand-gold">
-                Real Progress.
-              </span>
-            </h1>
+            {/* Right Text Content */}
+            <div className="w-full lg:w-[70%] xl:w-[65%] px-4 sm:px-6 lg:pl-0 lg:pr-12 z-10">
+              <div className="max-w-3xl">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-brand-gold/10 border border-brand-gold/30 rounded-full text-brand-gold text-xs sm:text-sm font-semibold tracking-wider uppercase mb-6 sm:mb-8">
+                <Hammer className="w-4 h-4" />
+                Ujjain&apos;s Most Trusted Contractor
+              </div>
 
-            <p className="mt-6 sm:mt-8 text-base sm:text-lg md:text-xl text-white/80 max-w-2xl font-light leading-relaxed border-l-4 border-brand-gold pl-4 sm:pl-6">
-              We don&apos;t just build structures — we build your dreams. From foundation to
-              finishing, we deliver unparalleled excellence, transparent pricing, and robust engineering in every brick.
-            </p>
+              <h1 className="font-poppins font-black text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] text-white leading-[1.1] tracking-tight mb-6">
+                Real Site.<br />
+                <span className="text-brand-gold">Real Progress.</span>
+              </h1>
 
-            <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5">
-              <Link
-                href="/contact"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-brand-gold text-brand-black font-semibold rounded-lg hover:bg-brand-gold-dark transition-all duration-300 shadow-[0_0_20px_rgba(212,175,55,0.3)] flex items-center justify-center gap-2 text-base sm:text-lg"
-              >
-                Start Your Project
-                <ArrowRight className="w-5 h-5" />
-              </Link>
-              <a
-                href="tel:+918319213539"
-                className="px-6 sm:px-8 py-3.5 sm:py-4 bg-white/10 border border-white/20 text-white font-semibold rounded-lg hover:bg-white/20 transition-colors duration-300 flex items-center justify-center gap-2"
-              >
-                <Phone className="w-5 h-5 text-brand-gold" />
-                +91 8319213539
-              </a>
+              <div className="pl-6 sm:pl-8 border-l-4 border-brand-gold mb-10 sm:mb-12">
+                <p className="text-base sm:text-lg md:text-xl text-white/90 font-light leading-relaxed max-w-2xl">
+                  We don&apos;t just build structures — we build your dreams. From
+                  foundation to finishing, we deliver unparalleled excellence,
+                  transparent pricing, and robust engineering in every brick.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 sm:gap-5">
+                <Link
+                  href="/contact"
+                  className="px-6 sm:px-8 py-3.5 sm:py-4 bg-brand-gold text-brand-black font-semibold rounded-lg text-sm sm:text-base hover:bg-brand-gold-dark transition-all duration-300 flex items-center justify-center gap-2 shadow-lg"
+                >
+                  Start Your Project
+                  <ArrowRight className="w-5 h-5" />
+                </Link>
+                <a
+                  href="tel:+918319213539"
+                  className="px-6 sm:px-8 py-3.5 sm:py-4 bg-[#1e2330] sm:bg-white/5 sm:backdrop-blur-sm border border-white/20 text-white font-semibold rounded-lg text-sm sm:text-base hover:bg-[#2a3040] sm:hover:bg-white/10 hover:border-white/40 transition-colors duration-300 flex items-center justify-center gap-2 shadow-lg"
+                >
+                  <svg className="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  +91 8319213539
+                </a>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Scroll indicator - hidden on mobile for cleaner look */}
+      {/* Scroll indicator - hidden on mobile for cleaner look */}
         {!isMobile && (
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2">
             <span className="text-white/40 text-xs font-medium tracking-widest uppercase">Scroll Down</span>
-            <div className="p-2 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 animate-bounce">
-              <ChevronDown className="w-5 h-5 text-brand-gold" />
+            <div className="p-2 rounded-full bg-white/10 border border-white/20">
+              <ChevronDown className="w-5 h-5 text-brand-gold animate-bounce" />
             </div>
           </div>
         )}
+      </section>
+
+      {/* ═══════ ABOUT / STATS SECTION ═══════ */}
+      <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="w-full text-center">
+            <div className="inline-flex items-center justify-center gap-2 text-[#b08945] text-xs sm:text-sm font-semibold tracking-widest uppercase mb-4 md:mb-6">
+              ||| BLESSED WITH STRENGTH, BUILT WITH PRECISION |||
+            </div>
+
+            <h2 className="font-poppins font-bold text-3xl sm:text-4xl md:text-5xl lg:text-[3.2rem] text-brand-black leading-[1.2] mb-6">
+              Building More Than Structures,<br />
+              <span className="text-[#963737]">We Build Relationships.</span>
+            </h2>
+
+            <p className="text-brand-gray/80 text-base sm:text-lg leading-relaxed mb-10 max-w-3xl mx-auto">
+              Maa Bhawani Construction & Contractor is a trusted name in the construction industry, known for quality work, on-time delivery and complete customer satisfaction. With blessings of Maa Bhawani, we are committed to building a stronger tomorrow.
+            </p>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+              {/* Stat 1 */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#eaddca] text-center shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center aspect-square">
+                <div className="mb-3 flex items-center justify-center">
+                  <Building className="w-9 h-9 text-brand-black" strokeWidth={1.5} />
+                </div>
+                <AnimatedCounter target={10} suffix="+" className="font-poppins font-bold text-3xl sm:text-4xl text-[#b08945]" />
+                <p className="text-xs sm:text-sm text-brand-black font-semibold mt-1 uppercase tracking-wide">Years of<br />Experience</p>
+              </div>
+
+              {/* Stat 2 */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#eaddca] text-center shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center aspect-square">
+                <div className="mb-3 flex items-center justify-center">
+                  <Briefcase className="w-9 h-9 text-brand-black" strokeWidth={1.5} />
+                </div>
+                <AnimatedCounter target={500} suffix="+" className="font-poppins font-bold text-3xl sm:text-4xl text-[#b08945]" />
+                <p className="text-xs sm:text-sm text-brand-black font-semibold mt-1 uppercase tracking-wide">Projects<br />Completed</p>
+              </div>
+
+              {/* Stat 3 */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#eaddca] text-center shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center aspect-square">
+                <div className="mb-3 flex items-center justify-center">
+                  <Users className="w-9 h-9 text-brand-black" strokeWidth={1.5} />
+                </div>
+                <AnimatedCounter target={50} suffix="+" className="font-poppins font-bold text-3xl sm:text-4xl text-[#b08945]" />
+                <p className="text-xs sm:text-sm text-brand-black font-semibold mt-1 uppercase tracking-wide">Skilled<br />Professionals</p>
+              </div>
+
+              {/* Stat 4 */}
+              <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#eaddca] text-center shadow-sm hover:shadow-md transition-shadow flex flex-col items-center justify-center aspect-square">
+                <div className="mb-3 flex items-center justify-center">
+                  <HeartHandshake className="w-9 h-9 text-brand-black" strokeWidth={1.5} />
+                </div>
+                <AnimatedCounter target={100} suffix="%" className="font-poppins font-bold text-3xl sm:text-4xl text-[#b08945]" />
+                <p className="text-xs sm:text-sm text-brand-black font-semibold mt-1 uppercase tracking-wide">Client<br />Satisfaction</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ═══════ FEATURES SECTION ═══════ */}
@@ -234,26 +340,148 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ═══════ STATS SECTION ═══════ */}
-      <section className="py-12 sm:py-16 md:py-20 bg-brand-black relative overflow-hidden">
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent" />
-
+      {/* ═══════ OUR SERVICES SECTION ═══════ */}
+      <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <AnimatedCounter target={stat.value} suffix={stat.suffix} />
-                <p className="text-white/50 text-xs sm:text-sm mt-1 sm:mt-2 font-medium">
-                  {stat.label}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+            <div className="flex-1 w-full text-center md:text-left">
+              <div className="mb-0">
+                <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-brand-black">
+                  Our Services
+                </h2>
+                <div className="w-16 h-1 bg-brand-gold rounded-full mt-4 mb-4 mx-auto md:mx-0" />
+                <p className="max-w-2xl text-base md:text-lg text-brand-gray/70 mx-auto md:mx-0">
+                  Comprehensive construction and finishing solutions tailored to your needs.
                 </p>
               </div>
+            </div>
+            <Link
+              href="/services"
+              className="hidden md:inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-black text-brand-gold font-semibold rounded-lg hover:bg-brand-black/90 transition-all duration-300 shadow-sm shrink-0"
+            >
+              Explore All Services
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {topServices.map((service) => (
+              <div
+                key={service.title}
+                className="group bg-white rounded-xl border border-[#eaddca] hover:border-brand-gold/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden hover:-translate-y-1 flex flex-col"
+              >
+                <div className="relative w-full h-48 overflow-hidden">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                  <div className="absolute bottom-4 left-4 z-20 w-12 h-12 bg-white/20 rounded-xl border border-white/30 flex items-center justify-center">
+                    <service.icon className="w-6 h-6 text-brand-gold" />
+                  </div>
+                </div>
+
+                <div className="p-6 relative z-10 flex-grow flex flex-col">
+                  <h3 className="font-poppins font-semibold text-lg text-brand-black mb-3">
+                    {service.title}
+                  </h3>
+                  <p className="text-sm text-brand-gray/70 leading-relaxed flex-grow">
+                    {service.desc}
+                  </p>
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+              </div>
             ))}
+          </div>
+
+          {/* Mobile "Explore All" Button */}
+          <div className="mt-8 flex md:hidden justify-center w-full">
+            <Link
+              href="/services"
+              className="inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-brand-black text-brand-gold font-semibold rounded-lg hover:bg-brand-black/90 transition-all duration-300 shadow-md"
+            >
+              Explore All Services
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════ RECENT PROJECTS SECTION ═══════ */}
+      <section className="py-16 sm:py-20 md:py-28 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-12">
+            <div className="flex-1 w-full text-center md:text-left">
+              <div className="mb-0">
+                <h2 className="font-poppins font-bold text-3xl md:text-4xl lg:text-5xl text-brand-black">
+                  Recent Projects
+                </h2>
+                <div className="w-16 h-1 bg-brand-gold rounded-full mt-4 mb-4 mx-auto md:mx-0" />
+                <p className="max-w-2xl text-base md:text-lg text-brand-gray/70 mx-auto md:mx-0">
+                  A glimpse into our latest construction and renovation work.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/work"
+              className="hidden md:inline-flex items-center justify-center gap-2 px-6 py-3 bg-brand-gold text-brand-black font-semibold rounded-lg hover:bg-brand-gold-dark transition-all duration-300 shadow-sm shrink-0"
+            >
+              See All Projects
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {projects.slice(0, 4).map((project) => (
+              <div
+                key={project.id}
+                className="bg-brand-light rounded-xl border border-gray-100 overflow-hidden hover:shadow-xl hover:border-brand-gold/30 transition-all duration-300 group"
+              >
+                <div className="w-full relative group/slider">
+                  <span className="absolute top-3 right-3 px-2 py-1 bg-brand-gold/90 text-brand-black text-xs font-semibold rounded-md z-30 shadow-md">
+                    {project.status}
+                  </span>
+                  <BeforeAfterSlider
+                    beforeImage={project.beforeImage}
+                    afterImage={project.afterImage}
+                    beforeLabel="Before"
+                    afterLabel="After"
+                    className="rounded-b-none rounded-t-xl"
+                  />
+                </div>
+                <div className="p-5">
+                  <span className="text-xs font-medium text-brand-gold uppercase tracking-wider">
+                    {project.category}
+                  </span>
+                  <h3 className="font-poppins font-semibold text-lg text-brand-black mt-1">
+                    {project.title}
+                  </h3>
+                  <p className="text-sm text-brand-gray/70 mt-2 leading-relaxed line-clamp-2">
+                    {project.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Mobile "See All" Button */}
+          <div className="mt-8 flex md:hidden justify-center w-full">
+            <Link
+              href="/work"
+              className="inline-flex w-full items-center justify-center gap-2 px-6 py-3.5 bg-brand-gold text-brand-black font-semibold rounded-lg hover:bg-brand-gold-dark transition-all duration-300 shadow-md"
+            >
+              See All Projects
+              <ArrowRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
 
       {/* ═══════ CTA SECTION ═══════ */}
-      <section className="py-16 sm:py-20 md:py-28 bg-white">
+      <section className="py-16 sm:py-20 md:py-28 bg-[#fcf9f2]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-poppins font-bold text-2xl sm:text-3xl md:text-4xl text-brand-black mb-4">
             Ready to Build Your Dream?

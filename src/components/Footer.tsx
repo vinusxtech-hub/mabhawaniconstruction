@@ -11,17 +11,17 @@ export function Footer() {
       {/* Gold accent strip */}
       <div className="h-1 bg-gradient-to-r from-brand-gold via-brand-gold-dark to-brand-gold" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-8 sm:gap-8">
           {/* Company Info */}
-          <div>
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <div className="relative w-24 h-24">
+              <div className="relative w-16 h-16">
                 <Image 
                   src="/logo.png" 
                   alt="Maa Bhawani Logo" 
                   fill
-                  sizes="96px"
+                  sizes="64px"
                   className="object-contain drop-shadow-md"
                 />
               </div>
@@ -41,11 +41,11 @@ export function Footer() {
           </div>
 
           {/* Quick Links */}
-          <div>
-            <h4 className="font-poppins font-semibold text-brand-gold mb-5 text-sm tracking-wider uppercase">
+          <div className="col-span-1">
+            <h4 className="font-poppins font-semibold text-brand-gold mb-4 text-sm tracking-wider uppercase">
               Quick Links
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {[
                 { name: "Home", href: "/" },
                 { name: "About Us", href: "/about" },
@@ -66,11 +66,11 @@ export function Footer() {
           </div>
 
           {/* Services */}
-          <div>
-            <h4 className="font-poppins font-semibold text-brand-gold mb-5 text-sm tracking-wider uppercase">
+          <div className="col-span-1">
+            <h4 className="font-poppins font-semibold text-brand-gold mb-4 text-sm tracking-wider uppercase">
               Our Services
             </h4>
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {[
                 "Residential Construction",
                 "Commercial Construction",
@@ -92,11 +92,11 @@ export function Footer() {
           </div>
 
           {/* Contact Info */}
-          <div>
-            <h4 className="font-poppins font-semibold text-brand-gold mb-5 text-sm tracking-wider uppercase">
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
+            <h4 className="font-poppins font-semibold text-brand-gold mb-4 text-sm tracking-wider uppercase">
               Contact Us
             </h4>
-            <ul className="space-y-4">
+            <ul className="space-y-2">
               <li className="flex items-start gap-3">
                 <Phone className="w-4 h-4 text-brand-gold mt-0.5 shrink-0" />
                 <div>
@@ -138,7 +138,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-white/10 flex justify-center items-center">
+        <div className="mt-8 pt-4 border-t border-white/10 flex justify-center items-center">
           <p className="text-white/40 text-sm">
             © {new Date().getFullYear()} Maa Bhawani Construction & Contractor.
             All rights reserved.

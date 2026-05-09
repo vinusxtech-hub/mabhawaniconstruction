@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   Home,
   Building2,
@@ -23,84 +24,98 @@ const services = [
     title: "Kota Stone Polishing",
     desc: "Professional Kota stone polishing services to bring out the natural beauty and shine of your floors with long-lasting results.",
     category: "Flooring & Finishing",
+    image: "/floor.png",
   },
   {
     icon: Sparkles,
     title: "Marble Polishing",
     desc: "Expert marble polishing that restores the mirror-like finish of your marble surfaces, enhancing elegance and durability.",
     category: "Flooring & Finishing",
+    image: "/floor.png",
   },
   {
     icon: LayoutGrid,
     title: "Tile Installation",
     desc: "Precision tile installation for floors, walls, and bathrooms using premium adhesives and expert alignment techniques.",
     category: "Flooring & Finishing",
+    image: "/paper.png",
   },
   {
     icon: Layers,
     title: "Flooring Solutions",
     desc: "Complete flooring solutions including tiles, marble, Kota stone, and granite — tailored to your style and budget.",
     category: "Flooring & Finishing",
+    image: "/paper.png",
   },
   {
     icon: Wrench,
     title: "Home Renovation",
     desc: "Transform your existing space with our comprehensive renovation services — from structural changes to modern interior upgrades.",
     category: "Renovation",
+    image: "/wall.png",
   },
   {
     icon: Home,
     title: "Residential Construction",
     desc: "Complete residential construction from foundation to finishing. We build homes that stand the test of time.",
     category: "Construction",
+    image: "/under.png",
   },
   {
     icon: Building2,
     title: "Commercial Construction",
     desc: "Professional commercial construction services for shops, offices, warehouses, and multi-story commercial complexes.",
     category: "Construction",
+    image: "/image.png",
   },
   {
     icon: HardHat,
     title: "Full Construction Services",
     desc: "End-to-end construction management covering every phase — planning, execution, quality control, and timely delivery.",
     category: "Construction",
+    image: "/under.png",
   },
   {
     icon: Paintbrush,
     title: "Interior & Exterior Work",
     desc: "Complete interior and exterior finishing including painting, texturing, cladding, and decorative work.",
     category: "Renovation",
+    image: "/wall.png",
   },
   {
     icon: PanelTop,
     title: "Wall Construction",
     desc: "Strong and durable wall construction using quality bricks, blocks, and cement for residential and commercial projects.",
     category: "Construction",
+    image: "/image.png",
   },
   {
     icon: Columns3,
     title: "Column & Slab Work",
     desc: "Reinforced column and slab construction engineered for maximum load-bearing capacity and structural safety.",
     category: "Construction",
+    image: "/under.png",
   },
   {
     icon: ToyBrick,
     title: "Brick Work",
     desc: "Expert brickwork with precise bonding patterns, ensuring uniform walls with proper alignment and weather resistance.",
     category: "Construction",
+    image: "/image.png",
   },
   {
     icon: PaintBucket,
     title: "Plastering",
     desc: "Smooth, level plastering services that create the perfect surface for painting and finishing work.",
     category: "Finishing",
+    image: "/wall.png",
   },
   {
     icon: Hammer,
     title: "Finishing & Completion",
     desc: "Final finishing touches including painting, polishing, fixture installation, and cleanup for a move-in ready result.",
     category: "Finishing",
+    image: "/paper.png",
   },
 ];
 
@@ -136,29 +151,38 @@ export default function ServicesPage() {
             {services.map((service) => (
               <div
                 key={service.title}
-                className="group bg-white rounded-xl border border-gray-100 p-5 sm:p-6 hover:border-brand-gold/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden hover:-translate-y-1"
+                className="group bg-white rounded-xl border border-gray-100 hover:border-brand-gold/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden hover:-translate-y-1 flex flex-col"
               >
-                {/* Hover background effect */}
-                <div className="absolute inset-0 bg-gradient-to-br from-brand-gold/0 to-brand-gold/0 group-hover:from-brand-gold/5 group-hover:to-brand-gold/10 transition-all duration-500" />
-
-                <div className="relative z-10">
-                  {/* Category Badge */}
-                  <span className="inline-block px-2.5 py-1 bg-brand-light text-brand-gray/60 text-[10px] font-semibold tracking-wider uppercase rounded-md mb-3 sm:mb-4">
+                {/* Photo Area */}
+                <div className="relative w-full h-48 overflow-hidden">
+                  <Image
+                    src={service.image}
+                    alt={service.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover group-hover:scale-110 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-10" />
+                  
+                  {/* Category Badge on Top Right of Photo */}
+                  <span className="absolute top-4 right-4 z-20 px-2.5 py-1 bg-white/95 text-brand-black text-[10px] font-bold tracking-wider uppercase rounded-md shadow-sm">
                     {service.category}
                   </span>
 
-                  {/* Icon */}
-                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-brand-gold/10 rounded-xl flex items-center justify-center mb-3 sm:mb-4 group-hover:bg-brand-gold/20 transition-all duration-300">
-                    <service.icon className="w-6 h-6 sm:w-7 sm:h-7 text-brand-gold" />
+                  {/* Icon over Photo */}
+                  <div className="absolute bottom-4 left-4 z-20 w-12 h-12 bg-white/20 rounded-xl border border-white/30 flex items-center justify-center">
+                    <service.icon className="w-6 h-6 text-brand-gold" />
                   </div>
+                </div>
 
+                <div className="p-5 sm:p-6 relative z-10 flex-grow flex flex-col">
                   {/* Title */}
-                  <h3 className="font-poppins font-semibold text-base sm:text-lg text-brand-black mb-2">
+                  <h3 className="font-poppins font-semibold text-base sm:text-lg text-brand-black mb-2 line-clamp-2">
                     {service.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-xs sm:text-sm text-brand-gray/70 leading-relaxed">
+                  <p className="text-xs sm:text-sm text-brand-gray/70 leading-relaxed flex-grow">
                     {service.desc}
                   </p>
                 </div>

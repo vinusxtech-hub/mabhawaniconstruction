@@ -51,7 +51,7 @@ export function SectionHeading({
       >
         {title}
       </h2>
-      <div className="w-16 h-1 bg-brand-gold rounded-full mt-4 mb-4 mx-auto" />
+      <div className={`w-16 h-1 bg-brand-gold rounded-full mt-4 mb-4 ${centered ? "mx-auto" : ""}`} />
       {subtitle && (
         <p
           className={`max-w-2xl text-base md:text-lg ${
